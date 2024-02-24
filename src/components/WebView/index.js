@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 import WebView from "./Component";
-import {defaultStr} from "$cutils";
+import {defaultStr,defaultObj} from "$cutils";
 import React from "$react";
 import PropTypes from "prop-types";
 import {isValidUrl} from "$cutils/uri";
@@ -58,21 +58,15 @@ WebViewComponent.Local = WebViewComponent.LocalHtml;
 WebViewComponent.Url = React.forwardRef(({url,source,...props},ref)=>{
     const isU = isValidUrl(url);
     const uri = isU?url:undefined;
-    const source = defaultObj(source);
+    source = defaultObj(source);
     return <WebViewComponent
         testID={"RN_WebviewComponent_URL"}
         ref = {ref}
-        onMessage={(event) => {
-           console.log(event.nativeEvent.data," is message");
-        }}
         {...props}
         source = {{
             ...source,
-            headers: {
-                'IS_EXPO_UI_WEBVIEW_CLIENT_APP': true,
-                ...Object.assign({},source.headers),
-            },
-            uri,url:uri
+            uri,
+            url:uri
         }}
     />
 });

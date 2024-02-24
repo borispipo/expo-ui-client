@@ -2,17 +2,23 @@ import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
 import Browser,{session} from "$layouts/Browser";
 import {useState} from "react";
+import { useApp } from '../../hooks';
 
 export default function HomeScreen() {
-  const [url,setUrl] = useState("https://smart-eneo.fto-consulting.com")
-  return (
+  const activeUrl = session.getActiveUrl();
+  const [url,setUrl] = useState(activeUrl);
+  const {updateTheme} = useApp();
+  return (<>
     <View style={styles.container}>
       <Browser
-        style = {[styles.browser]}
+        style = {[styles.browser1]}
         url = {url}
+        onGetRemoteTheme = {(theme)=>{
+          updateTheme(theme);
+        }}
       />
     </View>
-  );
+  </> );
 }
 
 const styles = StyleSheet.create({
