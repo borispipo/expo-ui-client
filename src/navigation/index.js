@@ -58,8 +58,8 @@ export default function NavigationComponent ({state,hasGetStarted,isLoading,onGe
         const sOptions = defaultObj(typeof screenOptions =='function'? screenOptions(options) : screenOptions);
         const {navigation} = options;
         return extendObj(true,{},{
-            headerShown : false,
-            header : ()=> null,
+            headerShown : true,
+            header : (props)=> null,
             headerStyle: { backgroundColor: theme.colors.primary},
             presentation : isAndroid() || isWeb()? "modal":"default",
             animationEnabled : !isWeb(),

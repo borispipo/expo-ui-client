@@ -57,11 +57,12 @@ WebViewComponent.Local = WebViewComponent.LocalHtml;
 
 WebViewComponent.Url = React.forwardRef(({url,source,...props},ref)=>{
     const isU = isValidUrl(url);
+    const uri = isU?url:undefined;
     return <WebViewComponent
         testID={"RN_WebviewComponent_URL"}
         ref = {ref}
         {...props}
-        source = {{...defaultObj(source),url:isU?url:undefined}}
+        source = {{...defaultObj(source),uri,url:uri}}
     />
 });
 WebViewComponent.Url.displayName = "WebViewComponent.Url";

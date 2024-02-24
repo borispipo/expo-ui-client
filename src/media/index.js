@@ -1,5 +1,5 @@
 import { readAsStringAsync } from "./utils";
-import { loadAsset } from "../Assets/utils";
+import { loadAsset } from "./Assets/utils";
 import Asset from "./Assets";
 
 export * from "./Assets";
