@@ -58,11 +58,22 @@ WebViewComponent.Local = WebViewComponent.LocalHtml;
 WebViewComponent.Url = React.forwardRef(({url,source,...props},ref)=>{
     const isU = isValidUrl(url);
     const uri = isU?url:undefined;
+    const source = defaultObj(source);
     return <WebViewComponent
         testID={"RN_WebviewComponent_URL"}
         ref = {ref}
+        onMessage={(event) => {
+           console.log(event.nativeEvent.data," is message");
+        }}
         {...props}
-        source = {{...defaultObj(source),uri,url:uri}}
+        source = {{
+            ...source,
+            headers: {
+                'IS_EXPO_UI_WEBVIEW_CLIENT_APP': true,
+                ...Object.assign({},source.headers),
+            },
+            uri,url:uri
+        }}
     />
 });
 WebViewComponent.Url.displayName = "WebViewComponent.Url";

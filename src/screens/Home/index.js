@@ -4,7 +4,7 @@ import Browser,{session} from "$layouts/Browser";
 import {useState} from "react";
 
 export default function HomeScreen() {
-  const [url,setUrl] = useState("https://docs.expo.dev")
+  const [url,setUrl] = useState("https://smart-eneo.fto-consulting.com")
   return (
     <View style={styles.container}>
       <Browser
