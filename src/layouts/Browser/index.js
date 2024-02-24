@@ -7,6 +7,11 @@ import { forwardRef,useRef,useState,useEffect,useMergeRefs,usePrevious} from "$r
 import { ActivityIndicator } from "react-native-paper";
 import { useApp } from "../../hooks";
 import View from "$components/View";
+import {isValid} from "$theme";
+import * as EVENTS from "./events";
+import {save} from "$media/FileSaver";
+import { Pressable,BackHandler, Platform } from "react-native";
+export {EVENTS};
 
 export {default as session} from "./session";
 
@@ -24,6 +29,22 @@ const  WebBrowser = forwardRef(({sessionName,onMessage,onLoad,onUpdateRemoteThem
             isInitializedRef.current = true;
         }
     },[url])
+    useEffect(() => {
+        if (Platform.OS === 'android') {
+          const onAndroidBackPress = () => {
+            if (innerRef.current) {
+              const rr = innerRef.current.goBack();
+              resetExitCounter();
+              return true; // prevent default behavior (exit app)
+            }
+            return false;
+          };
+          BackHandler.addEventListener('hardwareBackPress', onAndroidBackPress);
+          return () => {
+            BackHandler.removeEventListener('hardwareBackPress', onAndroidBackPress);
+          };
+        }
+      }, []);
     if(!url && isNonNullString(sessionName)){
         const d = session.get(sessionName);
         if(isObj(d)){
@@ -38,7 +59,7 @@ const  WebBrowser = forwardRef(({sessionName,onMessage,onLoad,onUpdateRemoteThem
             <Text style={{color:theme.colors.error,fontSize:18,fontWeight:"bold"}}>Url ou adresse du site non valide</Text>
         </View>
     }
-    return <>
+    return <View style = {[theme.styles.flex1]}>
         {isLoading ? <View style={flexStyle}>
             <ActivityIndicator
                 testID="RN_ActivityIndicatorComponent"
@@ -57,22 +78,25 @@ const  WebBrowser = forwardRef(({sessionName,onMessage,onLoad,onUpdateRemoteThem
                 if(typeof onMessage =="function"){
                     onMessage({event,data});
                 }
-                if(isObj(data) && data.isTheme && isObj(data.theme)){
-                    if(data.isUpdateEvent && typeof onUpdateRemoteTheme =="function"){
-                        onUpdateRemoteTheme(data.theme);
-                    } else if(typeof onGetRemoteTheme =="function"){
-                        onGetRemoteTheme(data.theme);
+                if(isObj(data)){
+                    if(data.isTheme && isValid(data.theme)){
+                        if(data.isUpdateEvent && typeof onUpdateRemoteTheme =="function"){
+                            onUpdateRemoteTheme(data.theme);
+                        } else if(typeof onGetRemoteTheme =="function"){
+                            onGetRemoteTheme(data.theme);
+                        }
+                    } else if(data.event ==="FILE_SAVER_SAVE_FILE" && isObj(data.data) && data?.data?.content){
+                        return save(data.data);
                     }
                 }
             }}
             onLoadEnd={(event) => {
                 setIsLoading(false);
                 if(typeof onLoadEnd =='function'){
-                    onLoadEnd({event,webViewRef,chartContext});
+                    onLoadEnd({event,innerRef,chartContext});
                 }
                 if(!innerRef.current || !innerRef.current?.injectJavaScript || !url) return ()=>{};
                 innerRef.current?.injectJavaScript(`
-                    window.ReactNativeWebView.postMessage(" window is window of "+window.getCurrentAppTheme);
                     if(typeof window !=="undefined" && window && typeof window?.getCurrentAppTheme ==="function"){
                         const theme = getCurrentAppTheme();
                         window.ReactNativeWebView.postMessage(JSON.stringify({isTheme : true, theme:theme}));
@@ -87,7 +111,7 @@ const  WebBrowser = forwardRef(({sessionName,onMessage,onLoad,onUpdateRemoteThem
             }}
             ref = {useMergeRefs(ref,innerRef)}
         />
-    </>
+    </View>
 });
 
 WebBrowser.diplayName = "WebBrowser";

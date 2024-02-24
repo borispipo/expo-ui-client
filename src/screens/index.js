@@ -2,9 +2,10 @@ import {defaultStr} from "$cutils";
 import {sanitizeName} from "$cnavigation";
 import Stack from "../navigation/Stack";
 import Home from "./Home";
+import Sites from "./Sites";
 
 const screens = [];
-[Home].map((Screen)=>{
+[Home,Sites].map((Screen)=>{
     const screenName = defaultStr(Screen?.screenName,Screen?.name);
     if(screenName){
         const name = sanitizeName(screenName);

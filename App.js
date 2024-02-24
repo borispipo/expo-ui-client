@@ -1,3 +1,4 @@
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import StatusBar from "$components/StatusBar"; 
 import Navigation from "$src/navigation";
 import screens from "$screens";

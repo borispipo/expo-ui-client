@@ -16,6 +16,10 @@ const  WebViewComponent = React.forwardRef(({children,source,style,testID,...pro
          {...props} 
         testID = {testID} 
         style={[{backgroundColor:'transparent'},style]}
+        onFileDownload = {({ nativeEvent }) => {
+            const { downloadUrl } = nativeEvent;
+            console.log("will download urleeee ",downloadUrl);
+        }}
         source = {defaultObj(source)}
     >
         {children}

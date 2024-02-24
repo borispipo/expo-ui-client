@@ -1,0 +1,1 @@
+export const ACTIVATE_SITE = "ACTIVATE_SITE";

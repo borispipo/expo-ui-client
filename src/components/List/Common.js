@@ -5,7 +5,6 @@ import {grid,StylePropTypes} from "$theme";
 import PropTypes from "prop-types";
 import {defaultObj,defaultStr,extendObj,isObj,defaultDecimal,defaultArray,defaultFunc} from "$cutils";
 import {isMobileMedia} from "$cplatform/dimensions";
-import BackToTop from "$components/BackToTop";
 import {FlatList,StyleSheet,View} from "react-native";
 import Label from "$components/Label";
 import { useList,useGetNumColumns } from "./hooks";
@@ -167,7 +166,6 @@ const CommonListComponent = React.forwardRef((props,ref)=>{
                 {context.renderItem({item,index})}
             </View> 
         })}
-        {!isNotVirtual && !hasCustomBackToTop && customBackToTopRef !== false ? <BackToTop ref={backToTopRef} onPress={context.onBackActionPress} /> : null}
     </View>
 })
 

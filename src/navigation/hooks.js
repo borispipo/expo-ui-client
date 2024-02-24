@@ -1,7 +1,8 @@
 import {createContext,useContext,useState,useEffect,useMemo} from "react";
 import { NavigationContainer } from '@react-navigation/native';
 import APP from "$capp/instance";
-import {sanitizeName} from '$cnavigation';
+import {sanitizeName,navigationRef} from '$cnavigation';
+
 
 const MainNavigationContext = createContext(null);
 
@@ -10,7 +11,7 @@ export const useMainNavigation = ()=>{
 }
 
 export const MainNavigationProvider = ({children,...props})=>{
-    return <MainNavigationContext.Provider value = {props} children={<NavigationContainer {...props}>{children}</NavigationContainer>}/>
+    return <MainNavigationContext.Provider value = {props}  children={<NavigationContainer ref={navigationRef} {...props}>{children}</NavigationContainer>}/>
 }
 
 /*****

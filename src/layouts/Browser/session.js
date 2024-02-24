@@ -1,7 +1,11 @@
 import session from "$session";
 import {isObj,extendObj,isValidUrl} from "$cutils";
 import appConfig from "$capp/config";
+import APP from "$capp";
+import {ACTIVATE_SITE} from "./events";
+
 export const sessionKey = "web-browser-sessionskeys";
+
 
 const activeSessionName = "activeSite";
 
@@ -39,7 +43,12 @@ export const getActiveUrl = ()=>{
 }
 export const setActive = (site)=>{
     const name = typeof site =="string"? site : isObj(site)? site.name : null;
+    const active = getActive(name);
+    if(!isValidUrl(active?.url) || !active?.name){
+        return false;
+    }
     session.set(activeSessionName,name);
+    APP.trigger(ACTIVATE_SITE,active);
     return name;
 }
 export const set = (key,config)=>{
