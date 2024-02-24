@@ -26,7 +26,8 @@
     "react-native-web": "~0.19.6",
     "sharp-cli": "^2.1.0",
     "expo-system-ui": "~2.9.3",
-    "@react-native-community/netinfo": "11.1.0"
+    "@react-native-community/netinfo": "11.1.0",
+    "react-native-gesture-handler": "~2.14.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

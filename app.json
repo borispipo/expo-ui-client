@@ -23,6 +23,7 @@
         "backgroundColor": "#ffffff"
       }
     },
+    "scheme": "expo-ui-client",
     "web": {
       "favicon": "./assets/favicon.png"
     }
