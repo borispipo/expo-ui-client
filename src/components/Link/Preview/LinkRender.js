@@ -14,7 +14,7 @@ const LinkPreview = ({data,onPress,disabled,...otherProps}) => {
   const {theme} = useApp();
   const {url,favicons,title,siteName,description,mediaType,contentType,images} = data;
   const label = defaultStr(title,siteName);
-    const favicon = Array.isArray(favicons) && isValidUrl(favicons[0]) ? <RNImage
+    const favicon = false && Array.isArray(favicons) && isValidUrl(favicons[0]) ? <RNImage
      style={{
        flex: 1,
        position: "relative",
@@ -40,16 +40,8 @@ const LinkPreview = ({data,onPress,disabled,...otherProps}) => {
     {isNonNullString(description) ? <Label>{description}</Label> : null}
     {isValidUrl(url)? <Label fontSize={9}>{url}</Label> : null}
   </Link>
-  <HStack>
-    {image?<View style={style}>{image}</View> : favicon?<View style={style}>{favicon}</View> : null}
-  </HStack>
+  {image?<View style={style}>{image}</View> : favicon?<View style={style}>{favicon}</View> : null}
  </View>
 };
-
-const styles = StyleSheet.create({
-  container: {
-  
-  },
-});
 
 export default LinkPreview;

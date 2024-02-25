@@ -1,4 +1,5 @@
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { registerRootComponent } from 'expo';
 import StatusBar from "$components/StatusBar"; 
 import Navigation from "$src/navigation";
 import screens from "$screens";
@@ -99,3 +100,5 @@ const styles = StyleSheet.create({
     justifyContent : "center",
   }
 });
+
+registerRootComponent(App);
