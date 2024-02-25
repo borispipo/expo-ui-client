@@ -10,6 +10,8 @@
 const { program } = require('commander');
 
 const packageObj = require("../package.json");
+const dir = path.resolve(__dirname,"..");
+const appJSON = require(path.resolve(dir,"app.json"));
 const version = packageObj.version;
 const packageName = packageObj.name;
 const path = require("path");
@@ -29,19 +31,27 @@ program.command('init')
     console.log("création du répertoire de l'application "+appName);
     createDirSync(projectRoot);
     ["assets","src","App","babel.config.js","metro.config.js"].map((p)=>{
-        copy(path.resolve(__dirname,p),path.resolve(projectRoot,p));
+        copy(path.resolve(dir,p),path.resolve(projectRoot,p));
         const destGitIgnore = path.resolve(projectRoot,".gitignore");
         try {
             if(!fs.existsSync(destGitIgnore)){
-                fs.copyFileSync(path.resolve(__dirname,".gitignore"),destGitIgnore);
+                fs.copyFileSync(path.resolve(dir,".gitignore"),destGitIgnore);
             }
         } catch{}
         const destPackageJson = path.resolve(projectRoot,"package.json");
+        const destAppJSON = path.resolve(projectRoot,"app.json");
         if(!fs.existsSync(destPackageJson)){
             packageObj.name = appName;
             packageObj.version = "1.0.0";
             try {
                 fs.writeFileSync(destPackageJson,JSON.stringify(packageObj,null,2));
+            } catch{ }
+        }
+        if(!fs.existsSync(destAppJSON)){
+            appJSON.name = appName;
+            appJSON.slug = appName.trim().toLowerCase();
+            try {
+                fs.writeFileSync(destAppJSON,JSON.stringify(appJSON,null,2));
             } catch{ }
         }
         if(fs.existsSync(destPackageJson)){
@@ -50,5 +60,6 @@ program.command('init')
                 console.log("application "+appName+" créée.");
             });
         }
+        
     });
   });
