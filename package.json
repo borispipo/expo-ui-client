@@ -47,6 +47,5 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "babel-plugin-module-resolver": "^5.0.0"
-  },
-  "private": true
+  }
 }
