@@ -2,7 +2,10 @@ import session from "$session";
 import {isObj,extendObj,isValidUrl} from "$cutils";
 import appConfig from "$capp/config";
 import APP from "$capp";
-import {ACTIVATE_SITE} from "./events";
+import {ACTIVATE_SITE,UPDATE_SITE} from "./events";
+import * as EVENTS from "./events";
+
+export {EVENTS};
 
 export const sessionKey = "web-browser-sessionskeys";
 
@@ -29,7 +32,7 @@ const getDefaultActive = ()=>{
 }
 export const getActive = ()=>{
     const s = session.get(activeSessionName);
-    const r = typeof s =="string" ? get(activeSessionName)  : null;
+    const r = typeof s =="string" ? get(s)  : null;
     if(isObj(r) && isValidUrl(r.url)) return r;
     return getDefaultActive();
 }
@@ -59,13 +62,23 @@ export const set = (key,config)=>{
         s[key] = config;
     }
     session.set(sessionKey,s);
+    APP.trigger(UPDATE_SITE,key,config);
     return s;
+}
+export const deleteSession = (key)=>{
+    if(typeof key !=="string") return false;
+    const s = get();
+    delete s[key];
+    session.set(sessionKey,s);
+    APP.trigger(UPDATE_SITE,key);
+    return true;
 }
 
 export default {
     sessionKey,
     get,
     set,
+    delete : deleteSession,
     getActive,
     setActive,
     getActiveUrl,

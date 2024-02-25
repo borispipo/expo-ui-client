@@ -10,14 +10,15 @@ import View from "$components/View";
 import {isValid} from "$theme";
 import * as EVENTS from "./events";
 import {save} from "$media/FileSaver";
-import { Pressable,BackHandler, Platform } from "react-native";
+import {BackHandler, Platform } from "react-native";
 export {EVENTS};
+import Label from "$components/Label";
 
 export {default as session} from "./session";
 
 const flexStyle = [theme.styles.w100,theme.styles.justifyContentCenter,theme.styles.alignItemsCenter,theme.styles.flex1];
 
-const  WebBrowser = forwardRef(({sessionName,onMessage,onLoad,onUpdateRemoteTheme,onGetRemoteTheme,title,url,...props},ref)=>{
+const  WebBrowser = forwardRef(({sessionName,onMessage,name,onLoad,onUpdateRemoteTheme,onGetRemoteTheme,title,url,...props},ref)=>{
     url = isValidUrl(url)? url : undefined;
     const prevUrl = usePrevious(url);
     const isInitializedRef = useRef(false);
@@ -61,11 +62,14 @@ const  WebBrowser = forwardRef(({sessionName,onMessage,onLoad,onUpdateRemoteThem
     }
     return <View style = {[theme.styles.flex1]}>
         {isLoading ? <View style={flexStyle}>
-            <ActivityIndicator
-                testID="RN_ActivityIndicatorComponent"
-                color={appTheme.colors.primary}
-                size = {"large"}
-            />
+            <View>
+                <ActivityIndicator
+                    testID="RN_ActivityIndicatorComponent"
+                    color={appTheme.colors.primary}
+                    size = "medium"
+                />
+                {isNonNullString(name)?<Label style={theme.styles.p1}>{name}</Label> : null}
+            </View>
         </View> : null}
         <WebView.Url
             url = {url}

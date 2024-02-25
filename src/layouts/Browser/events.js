@@ -1,1 +1,2 @@
 export const ACTIVATE_SITE = "ACTIVATE_SITE";
+export const UPDATE_SITE = "UPDATE_SITE";

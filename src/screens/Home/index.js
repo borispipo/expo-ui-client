@@ -15,15 +15,12 @@ export default function HomeScreen(props) {
   const pressCountRef = useRef(0);
   const timeoutRef = useRef(null);
   const timeRef = useRef(new Date().getTime());
+  const cActive = session.getActive();
   useEffect(()=>{
-    const onActive = (site)=>{
-      
+    if(cActive?.name !== active?.name || cActive?.url !== active?.url){
+      setActive(cActive);
     }
-    APP.on(EVENTS.ACTIVATE_SITE,onActive);
-    return ()=>{
-      APP.off(EVENTS.ACTIVATE_SITE,onActive);
-    }
-  },[]);
+  },[JSON.stringify(cActive)]);
   return (<>
     <TouchableWithoutFeedback style={styles.container} onPress={(e)=>{
       if(new Date().getTime() - timeRef.current > 30000) {
