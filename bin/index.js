@@ -32,34 +32,35 @@ console.log("création du répertoire de l'application "+appName);
 createDirSync(projectRoot);
 ["assets","src","App.js","babel.config.js","metro.config.js"].map((p)=>{
     copy(path.resolve(dir,p),path.resolve(projectRoot,p));
-    const destGitIgnore = path.resolve(projectRoot,".gitignore");
-    try {
-        if(!fs.existsSync(destGitIgnore)){
-            fs.copyFileSync(path.resolve(dir,".gitignore"),destGitIgnore);
-        }
-    } catch{}
-    const destPackageJson = path.resolve(projectRoot,"package.json");
-    const destAppJSON = path.resolve(projectRoot,"app.json");
-    if(!fs.existsSync(destPackageJson)){
-        packageObj.name = appName;
-        packageObj.version = "1.0.0";
-        try {
-            writeFile(destPackageJson,JSON.stringify(packageObj,null,2));
-        } catch{ }
-    }
-    if(!fs.existsSync(destAppJSON)){
-        appJSON.expo.name = appName;
-        appJSON.expo.slug = appJSON.expo.scheme = appName.trim().toLowerCase();
-        appJSON.expo.version = "1.0.0";
-        try {
-            writeFile(destAppJSON,JSON.stringify(appJSON,null,2));
-        } catch{ }
-    }
-    if(fs.existsSync(destPackageJson)){
-        console.log("installation des packages....");
-        exec(`npm install`,{projectRoot}).finally(()=>{
-            console.log("application "+appName+" créée.");
-        });
-    }
-    
 });
+
+const destGitIgnore = path.resolve(projectRoot,".gitignore");
+try {
+    if(!fs.existsSync(destGitIgnore)){
+        fs.copyFileSync(path.resolve(dir,".gitignore"),destGitIgnore);
+    }
+} catch{}
+
+const destPackageJson = path.resolve(projectRoot,"package.json");
+const destAppJSON = path.resolve(projectRoot,"app.json");
+if(!fs.existsSync(destPackageJson)){
+    packageObj.name = appName;
+    packageObj.version = "1.0.0";
+    try {
+        writeFile(destPackageJson,JSON.stringify(packageObj,null,2));
+    } catch{ }
+}
+if(!fs.existsSync(destAppJSON)){
+    appJSON.expo.name = appName;
+    appJSON.expo.slug = appJSON.expo.scheme = appName.trim().toLowerCase();
+    appJSON.expo.version = "1.0.0";
+    try {
+        writeFile(destAppJSON,JSON.stringify(appJSON,null,2));
+    } catch{ }
+}
+if(fs.existsSync(destPackageJson)){
+    console.log("installation des packages....");
+    exec(`npm install`,{projectRoot}).finally(()=>{
+        console.log("application "+appName+" créée.");
+    });
+}
