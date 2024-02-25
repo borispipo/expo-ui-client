@@ -58,6 +58,14 @@ if(!fs.existsSync(destAppJSON)){
         writeFile(destAppJSON,JSON.stringify(appJSON,null,2));
     } catch{ }
 }
+const easJson = path.resolve(projectRoot,"eas.json");
+if(!fs.existsSync(easJson)){
+    const easJ = require(path.resolve(dir,"eas.json"));
+    try {
+        writeFile(easJson,JSON.stringify(easJ,null,2));
+    } catch{ }
+}
+
 if(fs.existsSync(destPackageJson)){
     console.log("installation des packages....");
     exec(`npm install`,{projectRoot}).finally(()=>{
