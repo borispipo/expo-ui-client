@@ -23,11 +23,11 @@ export default function HomeScreen(props) {
     }}>
       <Browser
         style = {[styles.browser1]}
-        url = {active.url}
+        url = {active?.url}
         onGetRemoteTheme = {(theme)=>{
           updateTheme(theme);
         }}
-        name = {active.name}
+        name = {active?.name}
       />
     </TouchableWithoutFeedback>
   </> );
