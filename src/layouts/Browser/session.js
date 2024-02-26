@@ -4,6 +4,7 @@ import appConfig from "$capp/config";
 import APP from "$capp";
 import {ACTIVATE_SITE,UPDATE_SITE} from "./events";
 import * as EVENTS from "./events";
+import packageJSON from "$packageJSON";
 
 export {EVENTS};
 
@@ -12,23 +13,22 @@ export const sessionKey = "web-browser-sessionskeys";
 
 const activeSessionName = "activeSite";
 
-
-export const defaultURL = isValidUrl (process.env.DEFAULT_URL)? process.env.DEFAULT_URL : "https://smart-eneo.fto-consulting.com";
+export const defaultURL = isValidUrl(packageJSON.defaultUrl) ? packageJSON.defaultUrl : isValidUrl (process.env.DEFAULT_URL)? process.env.DEFAULT_URL : undefined;
 
 export const get = (key)=>{
     const r = Object.assign({},session.get(sessionKey));
     if(typeof key =="string") return r[key];
     if(!r[appConfig.name]){
-        r[appConfig.name] = getDefaultActive();
+        r[appConfig.name] = Object.assign({},getDefaultActive());
     }
     return r;
 }
 
 const getDefaultActive = ()=>{
-    return {
+    return isValidUrl(defaultURL)? {
         name : appConfig.name,
         url : defaultURL,
-    };
+    } : null;
 }
 export const getActive = ()=>{
     const s = session.get(activeSessionName);
