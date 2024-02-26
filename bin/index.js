@@ -15,10 +15,11 @@ const dir = path.resolve(__dirname,"..");
 const appJSON = require(path.resolve(dir,"app.json"));
 const version = packageObj.version;
 const packageName = packageObj.name;
-const {exec,thowError,copy,writeFile,createDirSync} = require("@fto-consult/node-utils");
+const {exec,isValidUrl,copy,writeFile,createDirSync} = require("@fto-consult/node-utils");
 
 const script = process.argv[2];
 const appName = process.argv[3];
+const defaultUrl = process.argv[4];
 
 if(!script || script !=="init"){
     throw "Vous devez spécifier la tâche que vous souhaitez faire via l'un des scripts : "+["init"].join(",");
@@ -37,7 +38,7 @@ createDirSync(projectRoot);
 const destGitIgnore = path.resolve(projectRoot,".gitignore");
 try {
     if(!fs.existsSync(destGitIgnore)){
-        fs.copyFileSync(path.resolve(dir,".gitignore"),destGitIgnore);
+        writeFile(destGitIgnore,require("./gitignore"));
     }
 } catch{}
 
@@ -46,6 +47,10 @@ const destAppJSON = path.resolve(projectRoot,"app.json");
 if(!fs.existsSync(destPackageJson)){
     packageObj.name = appName;
     packageObj.version = "1.0.0";
+    delete packageObj.bin;
+    if(defaultUrl && isValidUrl(defaultUrl)){
+        packageObj.defaultUrl = defaultUrl;
+    }
     try {
         writeFile(destPackageJson,JSON.stringify(packageObj,null,2));
     } catch{ }
