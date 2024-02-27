@@ -32,9 +32,8 @@ const projectRoot = path.resolve(process.cwd(),appName);
 console.log("création du répertoire de l'application "+appName);
 createDirSync(projectRoot);
 ["assets","src","App.js","babel.config.js","metro.config.js"].map((p)=>{
-    copy(path.resolve(dir,p),path.resolve(projectRoot,p));
+    copy(path.resolve(dir,p),path.resolve(projectRoot,p),{overwrite:false});
 });
-
 const destGitIgnore = path.resolve(projectRoot,".gitignore");
 try {
     if(!fs.existsSync(destGitIgnore)){
