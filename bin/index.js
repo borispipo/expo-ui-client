@@ -35,9 +35,16 @@ createDirSync(projectRoot);
     copy(path.resolve(dir,p),path.resolve(projectRoot,p),{overwrite:false});
 });
 const destGitIgnore = path.resolve(projectRoot,".gitignore");
+const destEasIgnore = path.resolve(projectRoot,".easignore");
 try {
     if(!fs.existsSync(destGitIgnore)){
         writeFile(destGitIgnore,require("./gitignore"));
+    }
+} catch{}
+
+try {
+    if(!fs.existsSync(destEasIgnoree)){
+        writeFile(destEasIgnore,require("./easignore"));
     }
 } catch{}
 
