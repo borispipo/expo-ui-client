@@ -1,6 +1,6 @@
 import WebView from "$components/WebView";
 import session from "./session";
-import {isNonNullString,defaultStr,isLoading,isValidUrl,isJSON,isObj} from "$cutils";
+import {isNonNullString,defaultStr,isLoading,isValidUrl,isJSON,isObj,logRNWebview,WEBVIEW_SAVE_FILE_EVENT,WEBVIEW_LOG_EVENT} from "$cutils";
 import { Text } from "react-native";
 import theme from "$theme";
 import { forwardRef,useRef,useState,useEffect,useMergeRefs,usePrevious} from "$react";
@@ -34,6 +34,7 @@ const  WebBrowser = forwardRef(({sessionName,onMessage,name,onLoad,onUpdateRemot
         if (Platform.OS === 'android') {
           const onAndroidBackPress = () => {
             if (innerRef.current) {
+              const rr = innerRef.current.goBack();
               return true; // prevent default behavior (exit app)
             }
             return false;
@@ -77,6 +78,9 @@ const  WebBrowser = forwardRef(({sessionName,onMessage,name,onLoad,onUpdateRemot
                 if(isJSON(data)){
                     data = JSON.parse(data);
                 }
+                if(isObj(data) && data.event === WEBVIEW_LOG_EVENT && isObj(data.data) ){
+                    return console.log(data.event,data.data.message);
+                }
                 if(typeof onMessage =="function"){
                     onMessage({event,data});
                 }
@@ -87,7 +91,7 @@ const  WebBrowser = forwardRef(({sessionName,onMessage,name,onLoad,onUpdateRemot
                         } else if(typeof onGetRemoteTheme =="function"){
                             onGetRemoteTheme(data.theme);
                         }
-                    } else if(data.event ==="FILE_SAVER_SAVE_FILE" && isObj(data.data) && data?.data?.content){
+                    } else if(data.event === WEBVIEW_SAVE_FILE_EVENT && data?.data?.content){
                         return save(data.data);
                     }
                 }
