@@ -34,8 +34,6 @@ const  WebBrowser = forwardRef(({sessionName,onMessage,name,onLoad,onUpdateRemot
         if (Platform.OS === 'android') {
           const onAndroidBackPress = () => {
             if (innerRef.current) {
-              const rr = innerRef.current.goBack();
-              resetExitCounter();
               return true; // prevent default behavior (exit app)
             }
             return false;
