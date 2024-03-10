@@ -1,9 +1,12 @@
 import { Directories,FileSystem } from "./native";
-import {defaultStr,defaultBool,isBase64} from "$cutils";
+import {defaultStr,defaultBool,isBase64,isNonNullString,logRNWebview} from "$cutils";
 import p from "./path";
 import * as Sharing from 'expo-sharing';
+import * as IntentLauncher from 'expo-intent-launcher';
+import {isAndroid} from "$cplatform";
+const mime = require('react-native-mime-types');
 
-export const save = ({content,isBase64:isB64,share,directory,fileName,path})=>{
+export const save = ({content,isBase64:isB64,share,directory,fileName,contentType,path})=>{
     path = defaultStr(path,directory,Directories.DOCUMENTS).trim().rtrim("/");
     share = defaultBool(share,true);
     let foundDirectory = null,dirToMake = null;
@@ -46,7 +49,17 @@ export const save = ({content,isBase64:isB64,share,directory,fileName,path})=>{
         const cb = (r,resolve)=>{
             setTimeout(()=>{
                 if(share){
-                    Sharing.shareAsync(path);
+                    contentType = defaultStr(contentType)  || isNonNullString(fileName) ? mime.contentType(fileName)  : undefined || mime.contentType(".txt");
+                    if(isAndroid() && isNonNullString(contentType)){
+                        FileSystem.getContentUriAsync(path).then(cUri => {
+                            IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
+                              data: cUri,
+                              flags: 1,
+                            });
+                        });
+                    } else {
+                        Sharing.shareAsync(path);
+                    }
                 }
             },0);
             const r2 = {fileName,path,result:r};
