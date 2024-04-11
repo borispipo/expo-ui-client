@@ -174,6 +174,7 @@ const  WebBrowser = forwardRef(({sessionName,onMessage,name,onLoad,onUpdateRemot
             }}
             onLoadEnd={(event) => {
                 setIsLoading(false);
+                setError(null);
                 if(typeof onLoadEnd =='function'){
                     onLoadEnd({event,innerRef,chartContext});
                 }

@@ -26,9 +26,6 @@
     "scheme": "expo-ui-client",
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      "./android-manifest.plugin.js"
-    ]
+    }
   }
 }
